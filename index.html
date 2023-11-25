@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Masai Doctor Records</title>
+    <style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+form {
+  width: 40%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="submit"] {
+  background-color: #4caf50;
+  color: #fff;
+  cursor: pointer;
+}
+
+table {
+  width: 50%;
+  background-color: #fff;
+  border-collapse: collapse;
+  margin-left: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+button {
+  background-color: #f44336;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #d32f2f;
+}
+
+select#filter {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+}
+
+    </style>
+  </head>
+  <body>
+    <!-- Use this form for data input  -->
+    <form>
+      <input placeholder="Name" type="text" id="name" />
+      <input placeholder="Doctor ID" type="text" id="doctor_id" />
+      <select id="specialization">
+        <option value="">Select Specialization</option>
+        <option value="Dermatologist">Dermatologist</option>
+        <option value="Dentist">Dentist</option>
+        <option value="Gynecologist">Gynecologist</option>
+      </select>
+      <input placeholder="Experience" type="number" id="experience" />
+      <input placeholder="Email" type="email" id="email" />
+      <input placeholder="Mobile No." type="number" id="mobile" />
+      <input type="submit" value="Submit" />
+    </form>
+
+    <!-- Use this Select tag for filter part  -->
+    <select id="filter">
+      <option value="">Select Specialization</option>
+      <option value="Dermatologist">Dermatologist</option>
+      <option value="Dentist">Dentist</option>
+      <option value="Gynecologist">Gynecologist</option>
+    </select>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Doctor ID</th>
+          <th>Specialization</th>
+          <th>Experience in Years</th>
+          <th>Email</th>
+          <th>Mobile No</th>
+          <th>Role</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Append Rows here using JS & DOM  -->
+      </tbody>
+    </table>
+  </body>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.querySelector("form");
+      const tableBody = document.querySelector("tbody");
+      const filterSelect = document.getElementById("filter");
+  
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+  
+        // Get form values
+        const name = document.getElementById("name").value;
+        const doctorId = document.getElementById("doctor_id").value;
+        const specialization = document.getElementById("specialization").value;
+        const experience = parseInt(document.getElementById("experience").value);
+        const email = document.getElementById("email").value;
+        const mobile = document.getElementById("mobile").value;
+  
+        // Determine role based on experience
+        let role = "";
+        if (experience > 5) {
+          role = "Senior";
+        } else if (experience >= 2 && experience <= 5) {
+          role = "Junior";
+        } else {
+          role = "Trainee";
+        }
+  
+        // Create a new row
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+          <td>${name}</td>
+          <td>${doctorId}</td>
+          <td>${specialization}</td>
+          <td>${experience}</td>
+          <td>${email}</td>
+          <td>${mobile}</td>
+          <td>${role}</td>
+          <td><button onclick="deleteRow(this)">Delete</button></td>
+        `;
+  
+        // Append the new row to the table
+        tableBody.appendChild(newRow);
+  
+        // Clear form inputs
+        form.reset();
+      });
+  
+      window.deleteRow = function (button) {
+        // Traverse up to the row and remove it
+        const row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+      };
+  
+      // Filter rows based on specialization
+      filterSelect.addEventListener("change", function () {
+        const selectedSpecialization = filterSelect.value.toLowerCase();
+  
+        // Show or hide rows based on the filter
+        Array.from(tableBody.children).forEach((row) => {
+          const rowSpecialization = row.children[2].textContent.toLowerCase();
+          row.style.display =
+            selectedSpecialization === "" ||
+            selectedSpecialization === rowSpecialization
+              ? ""
+              : "none";
+        });
+      });
+    });
+  </script>
+  
+  
+
+
+</html>
